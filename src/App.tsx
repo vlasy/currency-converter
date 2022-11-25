@@ -36,7 +36,7 @@ function Main() {
     console.log({ data });
 
     return (
-        <div>
+        <div className='content'>
             <CurrencyConverter rates={data} />
             <ExchangeRates rates={data} />
         </div>
