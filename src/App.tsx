@@ -37,8 +37,8 @@ function Main() {
 
     return (
         <div>
-            <CurrencyConverter />
-            <ExchangeRates rates={data}/>
+            <CurrencyConverter rates={data} />
+            <ExchangeRates rates={data} />
         </div>
     );
 }

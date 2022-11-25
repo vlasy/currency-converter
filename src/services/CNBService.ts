@@ -37,9 +37,9 @@ USA|dollar|1|USD|23.427`;
 export interface ExchangeRateEntry {
     country: string;
     currency: string;
-    amount: string;
+    amount: number;
     code: string;
-    rate: string;
+    rate: number;
 }
 
 export const getExchangeRates = async () => {
@@ -51,9 +51,9 @@ export const getExchangeRates = async () => {
         return {
             country: splitted[0],
             currency: splitted[1],
-            amount: splitted[2],
+            amount: parseInt(splitted[2]),
             code: splitted[3],
-            rate: splitted[4],
+            rate: parseFloat(splitted[4]),
         };
     });
     await new Promise((resolve) => setTimeout(resolve, 500)); // TODO: remove
