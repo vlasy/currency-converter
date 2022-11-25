@@ -1,6 +1,8 @@
 // This will communicate with the CNB exchange rate API
 // TODO: Use React Query to obtain the data
 
+import { resolve } from 'path';
+
 const dummyResponse = `24 Nov 2022 #227
 Country|Currency|Amount|Code|Rate
 Australia|dollar|1|AUD|15.831
@@ -36,7 +38,7 @@ Turkey|lira|1|TRY|1.258
 United Kingdom|pound|1|GBP|28.387
 USA|dollar|1|USD|23.427`;
 
-const getExchangeRates = () => {
+const getExchangeRates = async () => {
     const rows = dummyResponse.split('\n');
     const _dateRow = rows[0];
     const _headers = rows[1];
@@ -50,7 +52,7 @@ const getExchangeRates = () => {
             rate: splitted[4],
         };
     });
-    console.log(rates);
+    await new Promise((resolve) => setTimeout(resolve, 500)); // TODO: remove
     return rates;
 };
 
