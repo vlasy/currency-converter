@@ -9,7 +9,7 @@ interface ExchangeRatesProps {
 function ExchangeRates(props: ExchangeRatesProps) {
     return (
         <div>
-            <table>
+            <table className='pure-table pure-table-horizontal'>
                 <thead>
                     <tr>
                         <th>Country</th>
