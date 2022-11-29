@@ -1,5 +1,7 @@
 // This will communicate with the CNB exchange rate API
-const dummyResponse = `24 Nov 2022 #227
+// Keep it here for testing purposes.
+// TODO: Add environment-dependent configuration
+/* const dummyResponse = `24 Nov 2022 #227
 Country|Currency|Amount|Code|Rate
 Australia|dollar|1|AUD|15.831
 Brazil|real|1|BRL|4.395
@@ -32,7 +34,7 @@ Switzerland|franc|1|CHF|24.849
 Thailand|baht|100|THB|65.476
 Turkey|lira|1|TRY|1.258
 United Kingdom|pound|1|GBP|28.387
-USA|dollar|1|USD|23.427`;
+USA|dollar|1|USD|23.427`; */
 
 export interface ExchangeRateEntry {
     country: string;
@@ -42,20 +44,37 @@ export interface ExchangeRateEntry {
     rate: number;
 }
 
+const ratesURL =
+    'https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt';
+
+const downloadExchangeRates = async () => {
+    // Direct request was not working for me, so I used CORS proxy
+    const data = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(ratesURL)}`);
+    return (await data.json()).contents;
+};
+
+const parseExchangeRates = (data: string): ExchangeRateEntry[] => {
+    const rows = data.split('\n');
+    const rates = rows
+        .slice(2)
+        .filter((item) => item !== '')
+        .map((row: string) => {
+            const splitted = row.split('|');
+            return {
+                country: splitted[0],
+                currency: splitted[1],
+                amount: parseInt(splitted[2]),
+                code: splitted[3],
+                rate: parseFloat(splitted[4]),
+            };
+        });
+    return rates;
+};
+
 export const getExchangeRates = async () => {
-    const rows = dummyResponse.split('\n');
-    const _dateRow = rows[0];
-    const _headers = rows[1];
-    const rates = rows.slice(2).map((row: string) => {
-        const splitted = row.split('|');
-        return {
-            country: splitted[0],
-            currency: splitted[1],
-            amount: parseInt(splitted[2]),
-            code: splitted[3],
-            rate: parseFloat(splitted[4]),
-        };
-    });
     await new Promise((resolve) => setTimeout(resolve, 500)); // TODO: remove
+    const rawData = await downloadExchangeRates();
+    console.log({ rawData });
+    const rates = await parseExchangeRates(rawData);
     return rates;
 };
