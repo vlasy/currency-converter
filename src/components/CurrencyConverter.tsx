@@ -28,14 +28,28 @@ function CurrencyConverter(props: CurrencyConverterProps) {
     const [currencyOption, setCurrencyOption] = useState(currencyOptions[0].code);
     const [amount, setAmount] = useState(0);
     const [converted, setConverted] = useState<number>();
+
+    // Reactive change could be better, but the assignment said to convert only after the click
     return (
         <div>
             <input
                 type="number"
                 placeholder="Amount in CZK"
-                onChange={(e) => setAmount(parseInt(e.target.value, 10))}
+                min={0}
+                size={12}
+                required
+                onChange={(e) => {
+                    setAmount(parseInt(e.target.value, 10));
+                    setConverted(undefined);
+                }}
             ></input>
-            <select onChange={(e) => setCurrencyOption(e.target.value)}>
+
+            <select
+                onChange={(e) => {
+                    setCurrencyOption(e.target.value);
+                    setConverted(undefined);
+                }}
+            >
                 {currencyOptions.map((option) => (
                     <option value={option.code} key={option.code}>
                         {option.text}
@@ -43,7 +57,18 @@ function CurrencyConverter(props: CurrencyConverterProps) {
                 ))}
             </select>
             <input type="button" value="Convert" onClick={performConversion}></input>
-            {converted}
+            <br />
+            {converted ? (
+                `${amount.toLocaleString('cs-CZ', {
+                    style: 'currency',
+                    currency: 'CZK',
+                })} = ${converted?.toLocaleString('cs-CZ', {
+                    style: 'currency',
+                    currency: currencyOption,
+                })}`
+            ) : (
+                <br /> /* This is here to prevent layout change on "converted" appear/disappear */
+            )}
         </div>
     );
 }

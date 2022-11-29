@@ -33,10 +33,9 @@ function Main() {
         return <span>Error: {(error as any).message}</span>;
     }
 
-    console.log({ data });
-
     return (
-        <div className='content'>
+        <div className="content">
+            <h1>Simple currency converter</h1>
             <CurrencyConverter rates={data} />
             <ExchangeRates rates={data} />
         </div>
