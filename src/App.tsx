@@ -1,11 +1,15 @@
-import React from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import styled from 'styled-components';
 import './App.css';
 import CurrencyConverter from './components/CurrencyConverter';
 import ExchangeRates from './components/ExchangeRates';
 import { getExchangeRates } from './services/CNBService';
 
 const queryClient = new QueryClient();
+
+const Title = styled.h1`
+    font-size: 1.5em;
+`;
 
 function App() {
     return (
@@ -23,6 +27,7 @@ function Main() {
     const { isLoading, isError, data, error } = useQuery({
         queryKey: ['rates'],
         queryFn: getExchangeRates,
+        refetchOnWindowFocus: false,
     });
 
     if (isLoading) {
@@ -35,7 +40,7 @@ function Main() {
 
     return (
         <div className="content">
-            <h1>Simple currency converter</h1>
+            <Title>Simple currency converter</Title>
             <CurrencyConverter rates={data} />
             <ExchangeRates rates={data} />
         </div>
