@@ -72,7 +72,6 @@ const parseExchangeRates = (data: string): ExchangeRateEntry[] => {
 };
 
 export const getExchangeRates = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500)); // TODO: remove
     const rawData = await downloadExchangeRates();
     const rates = await parseExchangeRates(rawData);
     return rates;
